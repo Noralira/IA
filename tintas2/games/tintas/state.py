@@ -1,12 +1,12 @@
 import random
 from typing import Optional
 
-from games.connect4.action import Connect4Action
-from games.connect4.result import Connect4Result
+from games.tintas.action import TintasAction
+from games.tintas.result import TintasResult
 from games.state import State
 
 
-class Connect4State(State):
+class TintasState(State):
     preto = "1"
     branco = "2"
     laranja = "3"
@@ -28,8 +28,8 @@ class Connect4State(State):
         """
         the grid
         """
-        EC= Connect4State.EMPTY_CELL
-        _= Connect4State.NP_CELL
+        EC= TintasState.EMPTY_CELL
+        _= TintasState.NP_CELL
         self.__grid = [
             [ _, _, _,EC, _, _, _, _, _],
             [ _, _,EC, _,EC, _,EC, _, _],
@@ -48,13 +48,13 @@ class Connect4State(State):
             [ _, _, _, _, _,EC, _, _, _]
         ]
 
-        all_pieces = [Connect4State.preto] * 7 
-        all_pieces += [Connect4State.branco] * 7
-        all_pieces += [Connect4State.laranja] * 7
-        all_pieces +=[Connect4State.verde] * 7
-        all_pieces +=[Connect4State.vermelho] * 7
-        all_pieces +=[Connect4State.azul] * 7
-        all_pieces +=[Connect4State.rosa] * 7
+        all_pieces = [TintasState.preto] * 7 
+        all_pieces += [TintasState.branco] * 7
+        all_pieces += [TintasState.laranja] * 7
+        all_pieces +=[TintasState.verde] * 7
+        all_pieces +=[TintasState.vermelho] * 7
+        all_pieces +=[TintasState.azul] * 7
+        all_pieces +=[TintasState.rosa] * 7
 
     
 
@@ -130,7 +130,7 @@ class Connect4State(State):
     def get_num_players(self):
         return 2
 
-    def validate_action(self, action: Connect4Action) -> bool:
+    def validate_action(self, action: TintasAction) -> bool:
         col = action.get_col()
 
         # valid column
@@ -138,12 +138,12 @@ class Connect4State(State):
             return False
 
         # full column
-        if self.__grid[0][col] != Connect4State.EMPTY_CELL:
+        if self.__grid[0][col] != TintasState.EMPTY_CELL:
             return False
 
         return True
 
-    def update(self, action: Connect4Action):
+    def update(self, action: TintasAction):
         col = action.get_col()
 
         # drop the checker
@@ -164,7 +164,7 @@ class Connect4State(State):
         print({
             0:                              ' ',
             1:                              ' ',
-            Connect4State.EMPTY_CELL:       ' '
+            TintasState.EMPTY_CELL:       ' '
         }[self.__grid[row][col]], end="")
 
     def __display_numbers(self):
@@ -204,7 +204,7 @@ class Connect4State(State):
         return self.__acting_player
 
     def clone(self):
-        cloned_state = Connect4State(self.__num_rows, self.__num_cols)
+        cloned_state = TintasState(self.__num_rows, self.__num_cols)
         cloned_state.__turns_count = self.__turns_count
         cloned_state.__acting_player = self.__acting_player
         cloned_state.__has_winner = self.__has_winner
@@ -213,11 +213,11 @@ class Connect4State(State):
                 cloned_state.__grid[row][col] = self.__grid[row][col]
         return cloned_state
 
-    def get_result(self, pos) -> Optional[Connect4Result]:
+    def get_result(self, pos) -> Optional[TintasResult]:
         if self.__has_winner:
-            return Connect4Result.LOOSE if pos == self.__acting_player else Connect4Result.WIN
+            return TintasResult.LOOSE if pos == self.__acting_player else TintasResult.WIN
         if self.__is_full():
-            return Connect4Result.DRAW
+            return TintasResult.DRAW
         return None
 
     def get_num_rows(self):

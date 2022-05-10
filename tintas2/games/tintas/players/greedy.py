@@ -1,23 +1,23 @@
 from random import choice
-from games.connect4.action import Connect4Action
-from games.connect4.player import Connect4Player
-from games.connect4.state import Connect4State
+from games.tintas.action import TintasAction
+from games.tintas.player import TintasPlayer
+from games.tintas.state import TintasState
 from games.state import State
 
 
-class GreedyConnect4Player(Connect4Player):
+class GreedyTintasPlayer(TintasPlayer):
 
     def __init__(self, name):
         super().__init__(name)
 
-    def get_action(self, state: Connect4State):
+    def get_action(self, state: TintasState):
         grid = state.get_grid()
 
         selected_col = None
         max_count = 0
 
         for col in range(0, state.get_num_cols()):
-            if not state.validate_action(Connect4Action(col)):
+            if not state.validate_action(TintasAction(col)):
                 continue
 
             count = 0
@@ -33,7 +33,7 @@ class GreedyConnect4Player(Connect4Player):
         if selected_col is None:
             raise Exception("There is no valid action")
 
-        return Connect4Action(selected_col)
+        return TintasAction(selected_col)
 
     def event_action(self, pos: int, action, new_state: State):
         # ignore

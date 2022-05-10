@@ -1,13 +1,13 @@
 import sys
 
-from games.connect4.action import Connect4Action
-from games.connect4.player import Connect4Player
-from games.connect4.result import Connect4Result
-from games.connect4.state import Connect4State
+from games.tintas.action import TintasAction
+from games.tintas.player import TintasPlayer
+from games.tintas.result import TintasResult
+from games.tintas.state import TintasState
 from games.state import State
 
 
-class MinimaxConnect4Player(Connect4Player):
+class MinimaxTintasPlayer(TintasPlayer):
 
     def __init__(self, name):
         super().__init__(name)
@@ -17,7 +17,7 @@ class MinimaxConnect4Player(Connect4Player):
     It's not a great heuristic as it doesn't take into consideration a defensive approach
     '''
 
-    def __heuristic(self, state: Connect4State):
+    def __heuristic(self, state: TintasState):
         grid = state.get_grid()
         longest = 0
 
@@ -90,14 +90,14 @@ class MinimaxConnect4Player(Connect4Player):
     to optimize the search :param is_initial_node: if true, the function will return the action with max ev, 
     otherwise it return the max ev (ev = expected value) """
 
-    def minimax(self, state: Connect4State, depth: int, alpha: int = -sys.maxsize, beta: int = sys.maxsize,
+    def minimax(self, state: TintasState, depth: int, alpha: int = -sys.maxsize, beta: int = sys.maxsize,
                 is_initial_node: bool = True):
         # first we check if we are in a terminal node (victory, draw or loose)
         if state.is_finished():
             return {
-                Connect4Result.WIN: 4,
-                Connect4Result.LOOSE: -4,
-                Connect4Result.DRAW: 0
+                TintasResult.WIN: 4,
+                TintasResult.LOOSE: -4,
+                TintasResult.DRAW: 0
             }[state.get_result(self.get_current_pos())]
 
         # if we reached the maximum depth, we will return the value of the heuristic
@@ -111,7 +111,7 @@ class MinimaxConnect4Player(Connect4Player):
             selected_pos = -1
 
             for pos in range(0, state.get_num_cols()):
-                action = Connect4Action(pos)
+                action = TintasAction(pos)
                 if state.validate_action(action):
                     previous_a = value
                     next_state = state.clone()
@@ -132,7 +132,7 @@ class MinimaxConnect4Player(Connect4Player):
             # very big integer
             value = sys.maxsize
             for pos in range(0, state.get_num_cols()):
-                action = Connect4Action(pos)
+                action = TintasAction(pos)
                 if state.validate_action(action):
                     next_state = state.clone()
                     next_state.play(action)
@@ -142,8 +142,8 @@ class MinimaxConnect4Player(Connect4Player):
                         break
             return value
 
-    def get_action(self, state: Connect4State):
-        return Connect4Action(self.minimax(state, 2))
+    def get_action(self, state: TintasState):
+        return TintasAction(self.minimax(state, 2))
 
     def event_action(self, pos: int, action, new_state: State):
         # ignore

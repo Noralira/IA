@@ -1,8 +1,8 @@
-from games.connect4.players.greedy import GreedyConnect4Player
-from games.connect4.players.human import HumanConnect4Player
-from games.connect4.players.minimax import MinimaxConnect4Player
-from games.connect4.players.random import RandomConnect4Player
-from games.connect4.simulator import Connect4Simulator
+from games.tintas.players.greedy import GreedyTintasPlayer
+from games.tintas.players.human import HumanTintasPlayer
+from games.tintas.players.minimax import MinimaxTintasPlayer
+from games.tintas.players.random import RandomTintasPlayer
+from games.tintas.simulator import TintasSimulator
 from games.game_simulator import GameSimulator
 
 
@@ -20,16 +20,16 @@ def read_player():
     while True:
         menuSelect = int(input("\nPlease select one of the four options: "))
         if menuSelect == 1:
-            return HumanConnect4Player("Human")
+            return HumanTintasPlayer("Human")
             
         elif menuSelect == 2:
-            return MinimaxConnect4Player("Minimax")
+            return MinimaxTintasPlayer("Minimax")
             
         elif menuSelect == 3:
-            return GreedyConnect4Player("Greedy")
+            return GreedyTintasPlayer("Greedy")
         
         elif menuSelect == 4:
-            return RandomConnect4Player("Random")
+            return RandomTintasPlayer("Random")
             
         else:
             print("The selection provided is invalid.")    
@@ -58,7 +58,7 @@ def main():
     num_iterations = 4
 
   
-    run_simulation("simulacao", Connect4Simulator(player1, player2), num_iterations)
+    run_simulation("simulacao", TintasSimulator(player1, player2), num_iterations)
 
 if __name__ == "__main__":
     main()
