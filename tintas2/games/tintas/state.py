@@ -95,7 +95,9 @@ class TintasState(State):
         determine if a winner was found already 
         """
         self.__has_winner = False
-    #"""
+
+    #Verifica se há vencedor
+
     def __check_winner(self, pieces_0, pieces_1):
         if self.__acting_player == 0 and pieces_0[0]==7 or pieces_0[1]==7 or pieces_0[2]==7 \
             or pieces_0[3]==7 or pieces_0[4]==7 or pieces_0[5]==7 or pieces_0[6]==7:
@@ -171,7 +173,7 @@ class TintasState(State):
     return row, col
     """
     #update vector of player
-    """
+    
     def update_number_pieces(self, col, row, pieces_1, pieces_0):
         val = self.__grid[row][col]
         if val == "p" and self.__acting_player == 1:
@@ -214,7 +216,7 @@ class TintasState(State):
                             else:
                                 if val == "d":
                                     pieces_0[6] = pieces_0[6] +1
-        """
+        
     
     #update action----------------------------------------------------------------------------------------------
 
