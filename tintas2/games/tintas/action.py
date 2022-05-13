@@ -1,5 +1,12 @@
-class TintasAction:
-    pass 
+class TintasAction():
+
+    __col: int
+    __row: int
+
+    def __init__(self, row: int, col: int):
+        self.__row = row
+        self.__col = col
+    
 
 # Move pawn action
 class TintasMoveAction(TintasAction):

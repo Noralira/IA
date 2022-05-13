@@ -69,7 +69,7 @@ class TintasState(State):
     #shuffle pieces ---------------------------------------------------------------------------------
 
         random.shuffle(all_pieces)
-        print(all_pieces)
+
         peca_atual = 0
         for i in range(0, len(self.__grid)):
             lin = self.__grid[i]
@@ -254,7 +254,7 @@ class TintasState(State):
         if val == -2:
             print("   ",end="")
         else:
-            print(f"|{self.__grid[row][col]}|",end="")
+            print(f" {self.__grid[row][col]} ",end="")
 
     def __display_numbers(self):
         for col in range(0, len(self.__grid[0])):
