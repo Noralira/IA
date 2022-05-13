@@ -10,10 +10,11 @@ class HumanTintasPlayer(TintasPlayer):
 
     def get_action(self, state: TintasState):
         state.display()
+        
         while True:
             # noinspection PyBroadException
             try:
-                return TintasAction(int(input(f"Player {state.get_acting_player()}, choose a column: ")))
+                return TintasAction(int(input(f"Player {state.get_acting_player()}, choose a column and line: ")))
             except Exception:
                 continue
 

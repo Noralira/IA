@@ -4,30 +4,40 @@ from typing import Optional
 from games.tintas.action import TintasAction
 from games.tintas.result import TintasResult
 from games.state import State
+from games.tintas.action import TintasMoveAction, TintasPassAction, TintasPlaceAction
 
 
 class TintasState(State):
-    preto = "1"
-    branco = "2"
-    laranja = "3"
-    rosa = "4"
-    azul = "5"
-    vermelho = "6"
-    verde = "7"
+
+    #list each color for each player--------------------------------------------------------------------------
+    pieces_0 = [0,0,0,0,0,0,0]
+    pieces_1 = [0,0,0,0,0,0,0]
+
+    #pieces-------------------------------------------------------------
+
+    preto = "p"
+    branco = "b"
+    laranja = "l"
+    rosa = "r"
+    azul = "a"
+    vermelho = "v"
+    verde = "d"
+
+    #cells----------------------------------------------------------------------------
 
     EMPTY_CELL = -1
     NP_CELL = -2
 
+    #players------------------------------------------------------------------------------------
+
+    PLAYER_0 = 0
+    PLAYER_1 = 1
     def __init__(self):
         super().__init__()
 
 
-        """
-        the dimensions of the board
-        """
-        """
-        the grid
-        """
+        #grid----------------------------------------------------------------
+
         EC= TintasState.EMPTY_CELL
         _= TintasState.NP_CELL
         self.__grid = [
@@ -56,7 +66,7 @@ class TintasState(State):
         all_pieces +=[TintasState.azul] * 7
         all_pieces +=[TintasState.rosa] * 7
 
-    
+    #shuffle pieces ---------------------------------------------------------------------------------
 
         random.shuffle(all_pieces)
         print(all_pieces)
@@ -68,7 +78,8 @@ class TintasState(State):
                     self.__grid[i][j] = all_pieces[peca_atual]
                     peca_atual = peca_atual + 1
 
-        
+        self.__p0_has_pawn = False
+        self.__p1_has_pawn = False
 
         """
         counts the number of turns in the current game
@@ -86,40 +97,28 @@ class TintasState(State):
         self.__has_winner = False
 
     def __check_winner(self, player):
-        # check for 4 across
-        for row in range(0, self.__num_rows):
-            for col in range(0, self.__num_cols - 3):
-                if self.__grid[row][col] == player and \
-                        self.__grid[row][col + 1] == player and \
-                        self.__grid[row][col + 2] == player and \
-                        self.__grid[row][col + 3] == player:
+        # check for 1 across------------------------------------------------------------
+        for row in range(0, self.__grid):
+            for col in range(0, self.__grid[0] - 3):
+                if self.__grid[row][col] == player:
                     return True
 
-        # check for 4 up and down
-        for row in range(0, self.__num_rows - 3):
-            for col in range(0, self.__num_cols):
-                if self.__grid[row][col] == player and \
-                        self.__grid[row + 1][col] == player and \
-                        self.__grid[row + 2][col] == player and \
-                        self.__grid[row + 3][col] == player:
+        # check for 1 up and down-------------------------------------------------------------
+        for row in range(0, self.__grid - 3):
+            for col in range(0, self.__grid[0]):
+                if self.__grid[row][col] == player:
                     return True
 
         # check upward diagonal
-        for row in range(3, self.__num_rows):
-            for col in range(0, self.__num_cols - 3):
-                if self.__grid[row][col] == player and \
-                        self.__grid[row - 1][col + 1] == player and \
-                        self.__grid[row - 2][col + 2] == player and \
-                        self.__grid[row - 3][col + 3] == player:
+        for row in range(3, self.__grid):
+            for col in range(0, self.__grid[0] - 3):
+                if self.__grid[row][col] == player:
                     return True
 
         # check downward diagonal
-        for row in range(0, self.__num_rows - 3):
-            for col in range(0, self.__num_cols - 3):
-                if self.__grid[row][col] == player and \
-                        self.__grid[row + 1][col + 1] == player and \
-                        self.__grid[row + 2][col + 2] == player and \
-                        self.__grid[row + 3][col + 3] == player:
+        for row in range(0, self.__grid - 3):
+            for col in range(0, self.__grid[0] - 3):
+                if self.__grid[row][col] == player:
                     return True
 
         return False
@@ -130,63 +129,87 @@ class TintasState(State):
     def get_num_players(self):
         return 2
 
+    #validate action--------------------------------------------------------------------------
+
     def validate_action(self, action: TintasAction) -> bool:
-        col = action.get_col()
-
-        # valid column
-        if col < 0 or col >= self.__num_cols:
+        if self.__acting_player == 0 and not self.__p0_has_pawn and type(action) != TintasPlaceAction:
             return False
-
-        # full column
-        if self.__grid[0][col] != TintasState.EMPTY_CELL:
+        if self.__acting_player == 1 and not self.__p1_has_pawn and type(action) != TintasPlaceAction:
             return False
-
         return True
 
+    #change player---------------------------------------------------------------------------
+
+    def switch_player(self):
+        self.__acting_player = 1 if self.__acting_player == 0 else 0
+
+
+    #Validate pawn placement---------------------------------------------------------------------------------------------------
+    """
+    def validate_pawn_placement(self):
+        is_valid_placement = False
+        row = -1
+        col = -1
+     while is_valid_placement is False:
+         if grid[row][col] == "EC" 
+            is_valid_placement = True
+
+    return row, col
+    """
+    #update action----------------------------------------------------------------------------------------------
+
     def update(self, action: TintasAction):
-        col = action.get_col()
-
-        # drop the checker
-        for row in range(self.__num_rows - 1, -1, -1):
-            if self.__grid[row][col] < 0:
-                self.__grid[row][col] = self.__acting_player
-                break
-
-        # determine if there is a winner
+        if type(action) == TintasPlaceAction:
+            self.__grid[action.get_line()][action.get_col()] = self.__acting_player
+            self.switch_player()
+        elif type(action) == TintasMoveAction:
+            pass
+        elif type(action) == TintasPassAction:
+            self.switch_player()
+        else:
+            pass
+        
+        # determine if there is a winner---------------------------------------------------------------------------------
         self.__has_winner = self.__check_winner(self.__acting_player)
 
-        # switch to next player
+        # switch to next player----------------------------------------------------------------------
+        
         self.__acting_player = 1 if self.__acting_player == 0 else 0
 
         self.__turns_count += 1
 
+
+    #display da grid------------------------------------------------------------------------------------------
     def __display_cell(self, row, col):
-        print({
-            0:                              ' ',
-            1:                              ' ',
-            TintasState.EMPTY_CELL:       ' '
-        }[self.__grid[row][col]], end="")
+        val = self.__grid[row][col]
+        if val == -2:
+            print("   ",end="")
+        else:
+            print(f"|{self.__grid[row][col]}|",end="")
 
     def __display_numbers(self):
-        for col in range(0, self.__num_cols):
+        for col in range(0, len(self.__grid[0])):
             if col < 10:
-                print(' ', end="") #colocar cores aleatorias com limite
+                print(' ', end="") 
+
             print(col, end="")
+            print("  ", end="")
         print("")
+    
 
     def __display_separator(self):
-        for col in range(0, self.__num_cols):
-            print("--", end="")
+        for col in range(0, len(self.__grid[0])):
+            print("----", end="")
         print("-")
 
     def display(self):
         self.__display_numbers()
         self.__display_separator()
 
-        for row in range(0, self.__num_rows):
-            print('|', end="")
-            for col in range(0, self.__num_cols):
+        for row in range(0, len(self.__grid)):
+            for col in range(0, len(self.__grid[0])):
                 self.__display_cell(row, col)
+                
                 print('|', end="")
             print("")
             self.__display_separator()
@@ -194,22 +217,23 @@ class TintasState(State):
         self.__display_numbers()
         print("")
 
-    def __is_full(self):
-        return self.__turns_count > (self.__num_cols * self.__num_rows)
+
 
     def is_finished(self) -> bool:
-        return self.__has_winner or self.__is_full()
+        return False
 
     def get_acting_player(self) -> int:
         return self.__acting_player
 
+    
+
     def clone(self):
-        cloned_state = TintasState(self.__num_rows, self.__num_cols)
+        cloned_state = TintasState()
         cloned_state.__turns_count = self.__turns_count
         cloned_state.__acting_player = self.__acting_player
         cloned_state.__has_winner = self.__has_winner
-        for row in range(0, self.__num_rows):
-            for col in range(0, self.__num_cols):
+        for row in range(0, len(self.__grid)):
+            for col in range(0, len(self.__grid[0])):
                 cloned_state.__grid[row][col] = self.__grid[row][col]
         return cloned_state
 
@@ -220,11 +244,13 @@ class TintasState(State):
             return TintasResult.DRAW
         return None
 
+
+
     def get_num_rows(self):
-        return self.__num_rows
+        return self.__grid
 
     def get_num_cols(self):
-        return self.__num_cols
+        return self.__grid
 
     def before_results(self):
         pass
