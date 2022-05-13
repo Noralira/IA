@@ -95,9 +95,23 @@ class TintasState(State):
         determine if a winner was found already 
         """
         self.__has_winner = False
+    #"""
+    def __check_winner(self, pieces_0, pieces_1):
+        if self.__acting_player == 0 and pieces_0[0]==7 or pieces_0[1]==7 or pieces_0[2]==7 \
+            or pieces_0[3]==7 or pieces_0[4]==7 or pieces_0[5]==7 or pieces_0[6]==7:
+            return True
+        if self.__acting_player == 0 and pieces_0[0]==4 and pieces_0[1]==4 and pieces_0[2]==4 and pieces_0[3]==4:
+            return True
+        else:
+            if self.__acting_player == 1 and pieces_1[0]==7 or pieces_1[1]==7 or pieces_1[2]==7 \
+            or pieces_1[3]==7 or pieces_1[4]==7 or pieces_1[5]==7 or pieces_1[6]==7:
+                return True
+            if self.__acting_player == 0 and pieces_0[0]==4 and pieces_0[1]==4 and pieces_0[2]==4 and pieces_0[3]==4:
+                return True
 
-    def __check_winner(self, player):
-        # check for 1 across------------------------------------------------------------
+    #"""
+    """
+          # check for 1 across------------------------------------------------------------
         for row in range(0, self.__grid):
             for col in range(0, self.__grid[0] - 3):
                 if self.__grid[row][col] == player:
@@ -122,7 +136,7 @@ class TintasState(State):
                     return True
 
         return False
-
+    """
     def get_grid(self):
         return self.__grid
 
@@ -156,6 +170,52 @@ class TintasState(State):
 
     return row, col
     """
+    #update vector of player
+    """
+    def update_number_pieces(self, col, row, pieces_1, pieces_0):
+        val = self.__grid[row][col]
+        if val == "p" and self.__acting_player == 1:
+            pieces_1[0] = pieces_1[0] +1
+        else:
+             if val == "b":
+                pieces_1[1] = pieces_1[1] +1
+             else: 
+                if val == "l":
+                    pieces_1[2] = pieces_1[2] +1
+                else:
+                    if val == "r":
+                     pieces_1[3] = pieces_1[3] +1
+                    else:
+                        if val == "a":
+                            pieces_1[4] = pieces_1[4] +1
+                        else:
+                            if val == "v":
+                                pieces_1[5] = pieces_1[5] +1
+                            else:
+                                if val == "d":
+                                    pieces_1[6] = pieces_1[6] +1
+        if val == "p" and self.__acting_player == 0:
+            pieces_0[0] = pieces_0[0] +1
+        else:
+             if val == "b":
+                pieces_0[1] = pieces_0[1] +1
+             else: 
+                if val == "l":
+                    pieces_0[2] = pieces_0[2] +1
+                else:
+                    if val == "r":
+                     pieces_0[3] = pieces_0[3] +1
+                    else:
+                        if val == "a":
+                            pieces_0[4] = pieces_0[4] +1
+                        else:
+                            if val == "v":
+                                pieces_0[5] = pieces_0[5] +1
+                            else:
+                                if val == "d":
+                                    pieces_0[6] = pieces_0[6] +1
+        """
+    
     #update action----------------------------------------------------------------------------------------------
 
     def update(self, action: TintasAction):
@@ -163,6 +223,12 @@ class TintasState(State):
             self.__grid[action.get_line()][action.get_col()] = self.__acting_player
             self.switch_player()
         elif type(action) == TintasMoveAction:
+    
+            #remove color piece and update vector of player
+            """
+            
+            """
+            
             pass
         elif type(action) == TintasPassAction:
             self.switch_player()
