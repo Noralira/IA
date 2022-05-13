@@ -16,20 +16,7 @@ class TintasMoveAction(TintasAction):
     def get_col(self):
         return self.__col
     
-# Remove action
-class TintasRemoveAction(TintasAction):
-    __col: int
-    __line: int
 
-    def __init__(self, col: int, line: int):
-        self.__col = col
-    
-    def get_line(self):
-        return self.__line
-
-    def get_col(self):
-        return self.__col
-    
 # Place pawn action
 class TintasPlaceAction(TintasAction):
     

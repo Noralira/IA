@@ -223,6 +223,7 @@ class TintasState(State):
     def update(self, action: TintasAction):
         if type(action) == TintasPlaceAction:
             self.__grid[action.get_line()][action.get_col()] = self.__acting_player
+            self.update_number_pieces()
             self.switch_player()
         elif type(action) == TintasMoveAction:
     
