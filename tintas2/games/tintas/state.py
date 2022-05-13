@@ -96,7 +96,7 @@ class TintasState(State):
         """
         self.__has_winner = False
 
-    #Verifica se há vencedor
+    #Verify if there is a winner
 
     def __check_winner(self, pieces_0, pieces_1):
         if self.__acting_player == 0 and pieces_0[0]==7 or pieces_0[1]==7 or pieces_0[2]==7 \
