@@ -39,19 +39,19 @@ def main():
     player2= None
 
     print("ESTG IA Games Simulator")
-    print("\n\t\tMain Menu - Escolhe o jogador 1")
+    print("\n\t\tMain Menu - Select player 1")
     print("\t1. Human")
-    print("\t2. minimax")
-    print("\t3. greedy")
-    print("\t4. random")
+    print("\t2. Minimax")
+    print("\t3. Greedy")
+    print("\t4. Random")
     player1 = read_player()
     
 
-    print("\n\t\tMain Menu - Escolhe o jogador 2")
+    print("\n\t\tMain Menu - Select player 2")
     print("\t1. Human")
-    print("\t2. minimax")
-    print("\t3. greedy")
-    print("\t4. random")
+    print("\t2. Minimax")
+    print("\t3. Greedy")
+    print("\t4. Random")
     
     player2 = read_player()
     
